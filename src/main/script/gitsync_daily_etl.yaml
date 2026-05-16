@@ -1,0 +1,23 @@
+dag:
+  id: gitsync_daily_etl
+  schedule: "0 3 * * *"
+  catchup: false
+  default_timeout: 30m
+tasks:
+  - id: extract
+    type: shell
+    script: |
+      #!/bin/bash
+      echo "extracting data"
+  - id: transform
+    type: shell
+    requires: [extract]
+    script: |
+      #!/bin/bash
+      echo "transforming data"
+  - id: load
+    type: shell
+    requires: [transform]
+    script: |
+      #!/bin/bash
+      echo "loading data"

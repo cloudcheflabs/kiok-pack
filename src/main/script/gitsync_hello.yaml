@@ -1,0 +1,10 @@
+dag:
+  id: gitsync_hello
+  catchup: false
+  default_timeout: 5m
+tasks:
+  - id: greet
+    type: shell
+    script: |
+      #!/bin/bash
+      echo "hello from a git-synced kiok DAG"
