@@ -1,0 +1,12 @@
+dag:
+  id: gitsync_python
+  catchup: false
+  default_timeout: 5m
+tasks:
+  - id: compute
+    type: python
+    script: |
+      import platform
+      print("python task from a git-synced DAG")
+      print("python", platform.python_version())
+      print("sum(1..100) =", sum(range(1, 101)))
