@@ -7,4 +7,10 @@ tasks:
     type: shell
     script: |
       #!/bin/bash
-      echo "hello from a git-synced kiok DAG"
+      echo "hello (UPDATED via git-sync)"
+  - id: followup
+    type: shell
+    requires: [greet]
+    script: |
+      #!/bin/bash
+      echo "new second task added by update"

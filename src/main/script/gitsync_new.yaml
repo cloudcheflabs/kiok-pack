@@ -1,0 +1,9 @@
+dag:
+  id: gitsync_new
+  catchup: false
+tasks:
+  - id: t
+    type: shell
+    script: |
+      #!/bin/bash
+      echo "brand new git-synced DAG"
