@@ -1,0 +1,9 @@
+dag:
+  id: gitsync_java
+  catchup: false
+  default_timeout: 5m
+tasks:
+  - id: java_hello
+    type: java
+    config:
+      class: com.cloudcheflabs.kiokpack.HelloJavaTask
