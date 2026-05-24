@@ -24,7 +24,6 @@ $SSH "
     --conf spark.hadoop.fs.s3a.access.key='{conn('s3-shannon', 'accessKey')}' \\
     --conf spark.hadoop.fs.s3a.secret.key='{conn('s3-shannon', 'secretKey')}' \\
     --conf spark.hadoop.fs.s3a.path.style.access=true \\
-    --conf spark.driverEnv.POLARIS_URI='http://172.31.12.163:30000/api/catalog' \\
     --conf spark.driverEnv.POLARIS_CRED='{conn('polaris-rest', 'oauthCredential')}' \\
     --conf spark.driverEnv.S3_ENDPOINT='{conn('s3-shannon', 'endpoint')}' \\
     --conf spark.driverEnv.S3_AK='{conn('s3-shannon', 'accessKey')}' \\
