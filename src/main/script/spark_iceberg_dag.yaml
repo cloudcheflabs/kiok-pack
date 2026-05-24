@@ -25,6 +25,11 @@ tasks:
       SSH="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR spark@172.31.12.163"
       $SSH "
         export JAVA_HOME=/opt/openlogic-openjdk-17.0.7+7-linux-x64
+          export POLARIS_URI='http://172.31.12.163:30000/api/catalog'
+          export POLARIS_CRED='${conn.polaris-rest.oauthCredential}'
+          export S3_ENDPOINT='${conn.s3-shannon.endpoint}'
+          export S3_AK='${conn.s3-shannon.accessKey}'
+          export S3_SK='${conn.s3-shannon.secretKey}'
         /opt/components/spark-main-master-1/bin/spark-submit \
           --master spark://172.31.12.163:8780 \
           --deploy-mode client --conf spark.eventLog.enabled=false \
@@ -34,11 +39,6 @@ tasks:
           --conf spark.hadoop.fs.s3a.access.key='${conn.s3-shannon.accessKey}' \
           --conf spark.hadoop.fs.s3a.secret.key='${conn.s3-shannon.secretKey}' \
           --conf spark.hadoop.fs.s3a.path.style.access=true \
-          --conf spark.driverEnv.POLARIS_URI='http://172.31.12.163:30000/api/catalog' \
-          --conf spark.driverEnv.POLARIS_CRED='${conn.polaris-rest.oauthCredential}' \
-          --conf spark.driverEnv.S3_ENDPOINT='${conn.s3-shannon.endpoint}' \
-          --conf spark.driverEnv.S3_AK='${conn.s3-shannon.accessKey}' \
-          --conf spark.driverEnv.S3_SK='${conn.s3-shannon.secretKey}' \
           s3a://pyspark-scripts/yaml_pyspark.py
       "
 

@@ -24,6 +24,11 @@ public class SparkIcebergJavaDag implements KiokDag {
             SSH="%s"
             $SSH "
               export JAVA_HOME=/opt/openlogic-openjdk-17.0.7+7-linux-x64
+              export POLARIS_URI='http://172.31.12.163:30000/api/catalog'
+              export POLARIS_CRED='%s'
+              export S3_ENDPOINT='%s'
+              export S3_AK='%s'
+              export S3_SK='%s'
               /opt/components/spark-main-master-1/bin/spark-submit \\
                 --master spark://172.31.12.163:8780 \\
                 --deploy-mode client --conf spark.eventLog.enabled=false \\
@@ -33,11 +38,6 @@ public class SparkIcebergJavaDag implements KiokDag {
                 --conf spark.hadoop.fs.s3a.access.key='%s' \\
                 --conf spark.hadoop.fs.s3a.secret.key='%s' \\
                 --conf spark.hadoop.fs.s3a.path.style.access=true \\
-                --conf spark.driverEnv.POLARIS_URI='http://172.31.12.163:30000/api/catalog' \\
-                --conf spark.driverEnv.POLARIS_CRED='%s' \\
-                --conf spark.driverEnv.S3_ENDPOINT='%s' \\
-                --conf spark.driverEnv.S3_AK='%s' \\
-                --conf spark.driverEnv.S3_SK='%s' \\
                 s3a://pyspark-scripts/java_pyspark.py
             "
             """.formatted(SSH,
