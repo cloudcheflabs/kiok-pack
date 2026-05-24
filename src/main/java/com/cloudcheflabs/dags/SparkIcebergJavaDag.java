@@ -7,9 +7,9 @@ import com.cloudcheflabs.kiok.sdk.KiokDag;
 /**
  * Kiok DAG (Java SDK) — same workload as the YAML / Python twins. One ssh
  * then one spark-submit per task; pyspark script (java_pyspark.py) + java
- * uberjar both live in S3. Credentials only via {@link Conn#of} references.
+ * uberjar both live in S3. Credentials only via {@link Conn#ref} references.
  * Prereq:
- *   * passwordless SSH kiok@worker → spark@spark-master
+ *   * passwordless SSH kiok@worker -> spark@spark-master
  *   * s3://pyspark-scripts/java_pyspark.py uploaded once
  */
 public class SparkIcebergJavaDag implements KiokDag {
@@ -17,6 +17,11 @@ public class SparkIcebergJavaDag implements KiokDag {
     private static final String SSH =
             "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "
           + "-o LogLevel=ERROR spark@172.31.12.163";
+
+    private static final String POLARIS_CRED = Conn.ref("polaris-rest", "oauthCredential");
+    private static final String S3_ENDPOINT  = Conn.ref("s3-shannon",   "endpoint");
+    private static final String S3_AK        = Conn.ref("s3-shannon",   "accessKey");
+    private static final String S3_SK        = Conn.ref("s3-shannon",   "secretKey");
 
     private static final String CLIENT_SCRIPT = """
             #!/bin/bash
@@ -41,13 +46,8 @@ public class SparkIcebergJavaDag implements KiokDag {
                 s3a://pyspark-scripts/java_pyspark.py
             "
             """.formatted(SSH,
-                    Conn.ref("s3-shannon", "endpoint"),
-                    Conn.ref("s3-shannon", "accessKey"),
-                    Conn.ref("s3-shannon", "secretKey"),
-                    Conn.ref("polaris-rest", "oauthCredential"),
-                    Conn.ref("s3-shannon", "endpoint"),
-                    Conn.ref("s3-shannon", "accessKey"),
-                    Conn.ref("s3-shannon", "secretKey"));
+                    POLARIS_CRED, S3_ENDPOINT, S3_AK, S3_SK,
+                    S3_ENDPOINT, S3_AK, S3_SK);
 
     private static final String CLUSTER_SCRIPT = """
             #!/bin/bash
@@ -67,10 +67,7 @@ public class SparkIcebergJavaDag implements KiokDag {
                 --conf spark.hadoop.fs.s3a.path.style.access=true \\
                 s3a://uberjar-upload/iceberg-smoke-java.jar
             "
-            """.formatted(SSH,
-                    Conn.ref("s3-shannon", "endpoint"),
-                    Conn.ref("s3-shannon", "accessKey"),
-                    Conn.ref("s3-shannon", "secretKey"));
+            """.formatted(SSH, S3_ENDPOINT, S3_AK, S3_SK);
 
     @Override
     public Dag define() {
